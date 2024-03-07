@@ -1,58 +1,39 @@
 import { Inter } from "next/font/google";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PokemonList from "./pokemon-list";
-import { TNavigationObj, TPokemonItem } from "@/types/pokemon.types";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setDataPokemon, setLoading } from "@/redux/pokemon-slice";
+import { getPokemonData } from "@/redux/pokemon-slice";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const [navigation, setNavigation] = useState<TNavigationObj>({
-    next: null,
-    prev: null,
-  });
-
-  const [isFetching, setIsFetching] = useState(false);
   const dispatch = useAppDispatch();
 
-  const { items: pokeList, isLoading } = useAppSelector(
-    (state) => state.pokemonList
-  );
+  const {
+    items: pokeList,
+    isLoading,
+    next,
+    prev,
+  } = useAppSelector((state) => state.pokemonList);
+
+  const navigation = { next, prev };
 
   useEffect(() => {
-    dispatch(setLoading(true));
-    fetch("https://pokeapi.co/api/v2/pokemon")
-      .then((res) => res.json())
-      .then((result): void => {
-        // setPokeList(result.results);
-        dispatch(setDataPokemon(result.results));
-        setNavigation({
-          next: result.next,
-          prev: result.previous,
-        });
-      })
-      .finally(() => dispatch(setLoading(false)));
+    dispatch(getPokemonData());
   }, []);
 
   const onNavHandle = (type: "prev" | "next") => {
-    dispatch(setLoading(true));
-    fetch(type === "next" ? navigation.next ?? "" : navigation.prev ?? "")
-      .then((res) => res.json())
-      .then((result): void => {
-        dispatch(setDataPokemon(result.results));
-        setNavigation({
-          next: result.next,
-          prev: result.previous,
-        });
-      })
-      .finally(() => dispatch(setLoading(false)));
+    dispatch(
+      getPokemonData(
+        type === "next" ? navigation.next ?? "" : navigation.prev ?? ""
+      )
+    );
   };
 
   return (
     <PokemonList
       isLoading={isLoading}
-      isFetching={isFetching}
+      isFetching={false}
       navigation={navigation}
       onNavHandle={onNavHandle}
       pokeList={pokeList}

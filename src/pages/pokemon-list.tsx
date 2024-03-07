@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { FC } from "react";
-import { TNavigationObj, TPokemonItem } from ".";
 import style from "@/styles/Home.module.css";
+import { TNavigationObj, TPokemonItem } from "@/types/pokemon.types";
 
 type TPokemonListProps = {
   onNavHandle: (type: "prev" | "next") => void;
