@@ -45,14 +45,11 @@ export const pokemonList = createSlice({
       getPokemonData.fulfilled,
       (state, action: PayloadAction<TResponse>) => {
         const { results, next, previous } = action.payload;
-        state = {
-          ...state,
-          items: results,
-          next,
-          prev: previous,
-          isFetching: false,
-          isLoading: false,
-        };
+        state.items = results;
+        state.next = next;
+        state.prev = previous;
+        state.isLoading = false;
+        state.isFetching = false;
       }
     );
     builder.addCase(getPokemonData.pending, (state, action) => {
