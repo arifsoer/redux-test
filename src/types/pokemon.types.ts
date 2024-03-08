@@ -8,8 +8,13 @@ export type TNavigationObj = {
   prev: string | null;
 };
 
-export type TResponse = {
+export type TDataResponse = {
   next: string | null;
   previous: string | null;
   results: TPokemonItem[];
+};
+
+export type TFetchResponse = {
+  code: number;
+  data: TDataResponse;
 };

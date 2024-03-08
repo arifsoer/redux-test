@@ -1,4 +1,4 @@
-import { TPokemonItem, TResponse } from "@/types/pokemon.types";
+import { TPokemonItem, TDataResponse } from "@/types/pokemon.types";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -43,7 +43,7 @@ export const pokemonList = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       getPokemonData.fulfilled,
-      (state, action: PayloadAction<TResponse>) => {
+      (state, action: PayloadAction<TDataResponse>) => {
         const { results, next, previous } = action.payload;
         state.items = results;
         state.next = next;
